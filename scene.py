@@ -382,7 +382,126 @@ class CreateFrequent(VoiceoverScene):
             self.play(ReplacementTransform(counter_2_cross, ball_2))
 
             # moving second counter to second group
-            
+            counter_2.remove(counter_2_next_arrow, counter_2_group_arrow)
+            counter_2.generate_target()
+            counter_2.target.next_to(counter_1_rec, LEFT)
+
+            counter_3.remove(counter_3_prev_arrow, counter_3_group_arrow)
+            counter_3.shift(LEFT)
+            counter_3_group_arrow = CurvedArrow(start_point=counter_3_rec.get_top(), end_point=first_group_rec.get_bottom(), angle=PI/2, color=WHITE)
+            counter_3_group_arrow.tip.height = 0.3
+            counter_3.add(counter_3_group_arrow)
+            first_group.remove(first_group_arrow_down)
+            first_group_arrow_down = CurvedArrow(start_point=first_group_rec.get_bottom(), end_point=counter_3_rec.get_top(), angle=PI/2, color=WHITE)
+            first_group_arrow_down.tip.height = 0.3
+            first_group.add(first_group_arrow_down)
+            first_group.remove(counter_2)
+            second_group.add(counter_2)
+
+            self.play(
+                MoveToTarget(counter_2),
+                counter_1.animate.shift(RIGHT),
+                Create(counter_3_group_arrow),
+                Create(first_group_arrow_down),
+                Uncreate(second_group_arrow_down),
+                Uncreate(counter_1_group_arrow)
+            )  
+
+
+            second_group.remove(second_group_arrow_down)
+            second_group_arrow_down = CurvedArrow(start_point=second_group_rec.get_bottom(), end_point=counter_2_rec.get_top(), angle=PI/4, color=WHITE)
+            second_group_arrow_down.tip.height = 0.3
+            second_group.add(second_group_arrow_down)
+            counter_1.remove(counter_1_group_arrow)
+            counter_1_group_arrow = CurvedArrow(start_point=counter_1_rec.get_top(), end_point=second_group_rec.get_bottom(), angle=0, color=WHITE)
+            counter_1_group_arrow.tip.height = 0.3
+            counter_1.add(counter_1_group_arrow)
+
+            counter_2_group_arrow = CurvedArrow(start_point=counter_2_rec.get_top(), end_point=second_group_rec.get_bottom(), angle=PI/4, color=WHITE)
+            counter_2_group_arrow.tip.height = 0.3
+            counter_2.add(counter_2_group_arrow)
+
+            counter_2_next_arrow = CurvedArrow(start_point=counter_2_rec.get_right(), end_point=counter_1_rec.get_left(), angle=-PI/2, color=WHITE)
+            counter_2_next_arrow.tip.height = 0.3
+            counter_2.add(counter_2_next_arrow)
+            counter_1_prev_arrow = CurvedArrow(start_point=counter_1_rec.get_left(), end_point=counter_2_rec.get_right(), angle=-PI/2, color=WHITE)
+            counter_1_prev_arrow.tip.height = 0.3
+            counter_1.add(counter_1_prev_arrow)
+
+            self.play(Create(second_group_arrow_down), Create(counter_1_group_arrow), Create(counter_2_next_arrow), Create(counter_1_prev_arrow))
+
+            # third ball into counter
+            ball_3 = self.make_stream_ball_2(STREAM[2])
+            ball_3.generate_target()
+            ball_3.target.move_to(counter_3_cross.get_center())
+            self.play(MoveToTarget(ball_3))
+            self.play(ReplacementTransform(counter_3_cross, ball_3))
+
+            # moving third counter to second group
+            counter_3.remove(counter_3_group_arrow)
+            first_group.remove(counter_3)
+            second_group.add(counter_3)
+            second_group.remove(second_group_prev_arrow)
+
+            self.play(
+                Uncreate(first_group),
+                Uncreate(second_group_prev_arrow),
+                second_group.animate.shift(LEFT*2)
+            )
+
+            counter_2.remove(counter_2_group_arrow)
+            counter_1.remove(counter_1_group_arrow)
+            second_group.remove(second_group_arrow_down)
+            second_group_text_2 = MathTex(r"\text{Value}=1")
+            second_group_rec_2 = SurroundingRectangle(second_group_text_2, corner_radius=0.5, buff=0.5, color=WHITE)
+            second_group_2 = VGroup(second_group_text_2, second_group_rec_2).scale(0.8)
+            # second_group.remove(counter_1, counter_2, counter_3)
+            second_group_2.add(counter_1, counter_2, counter_3)
+            self.play(
+                ReplacementTransform(second_group, second_group_2),
+                Uncreate(counter_2_group_arrow),
+                Uncreate(counter_1_group_arrow),
+                Uncreate(second_group_arrow_down),
+                counter_2.animate.shift(RIGHT*1.45),
+                counter_1.animate.shift(RIGHT*1.45),
+                counter_3.animate.shift(RIGHT*1.45),
+            )
+            counter_3_next_arrow = CurvedArrow(start_point=counter_3_rec.get_right(), end_point=counter_2_rec.get_left(), angle=-PI/2, color=WHITE)
+            counter_3_next_arrow.tip.height = 0.3
+            counter_3.add(counter_3_next_arrow)
+            counter_2_prev_arrow = CurvedArrow(start_point=counter_2_rec.get_left(), end_point=counter_3_rec.get_right(), angle=-PI/2, color=WHITE)
+            counter_2_prev_arrow.tip.height = 0.3
+            counter_2.add(counter_2_prev_arrow)
+
+            second_group_2_arrow_down = CurvedArrow(start_point=second_group_rec_2.get_critical_point(DL)+UP*0.1+RIGHT*0.1, end_point=counter_3_rec.get_top(), angle=0, color=WHITE)
+            second_group_2_arrow_down.tip.height = 0.3
+            second_group_2.add(second_group_2_arrow_down)
+
+
+            counter_3_group_arrow = CurvedArrow(start_point=counter_3_rec.get_top(), end_point=second_group_rec_2.get_critical_point(DL)+UP*0.1+RIGHT*0.1, angle=-PI/2, color=WHITE)
+            counter_3_group_arrow.tip.height = 0.3
+            counter_3.add(counter_3_group_arrow)
+            counter_2_group_arrow = CurvedArrow(start_point=counter_2_rec.get_top(), end_point=second_group_rec_2.get_bottom(), angle=0, color=WHITE)
+            counter_2_group_arrow.tip.height = 0.3
+            counter_2.add(counter_2_group_arrow)
+            counter_1_group_arrow = CurvedArrow(start_point=counter_1_rec.get_top(), end_point=second_group_rec_2.get_critical_point(DR)+UP*0.1+LEFT*0.1, angle=PI/2, color=WHITE)
+            counter_1_group_arrow.tip.height = 0.3
+            counter_1.add(counter_1_group_arrow)
+
+            self.play(
+                Create(counter_3_group_arrow),
+                Create(counter_2_group_arrow),
+                Create(counter_1_group_arrow),
+                Create(second_group_2_arrow_down),
+                Create(counter_3_next_arrow),
+                Create(counter_2_prev_arrow)
+            )
+
+            # fourth ball into counter
+            ball_4 = self.make_stream_ball_2(STREAM[3])
+            self.play(ReplacementTransform(ball_4, ball_1))
+
+            self.wait(2)
 
 
 
