@@ -176,11 +176,75 @@ class CreateFrequent(VoiceoverScene):
         with self.voiceover("Let us prove that this is always the case."):
             self.play(Uncreate(n_brace), Uncreate(k_brace), Uncreate(stream_text), Uncreate(candidates_text), Uncreate(stream_group), Uncreate(candidates), Uncreate(blues_brace), Uncreate(blues_text_1), Uncreate(blues_text_4))
          
-        with self.voiceover("""Let $x$ be an element which occurs more than $n/(k+1)$ times. Let us prove that $x$
-                            will always be a candidate at the end of the stream. We will denote its count by $t$"""):
-            x = MathTex(r"x", font_size = 48).shift(UP*2)
+        with self.voiceover("""Let $x$ be an element which occurs more than $n/(k+1)$ times, where t denotes its count. Let us prove that $x$
+                            will always be a candidate at the end of the stream."""):
+            x = MathTex(r"x", font_size = 48)
             self.play(Create(x))
-            t_1 = MathTex(r"t > \frac{n}{k+1}").next_to(x, 0)
+            self.wait(2)
+            t = MathTex(r"t", font_size = 48)
+            threshold = MathTex(r">\frac{n}{k+1}", font_size = 48)
+            t_1 = VGroup(t, threshold).arrange(RIGHT).next_to(x, 0)
+            self.play(ReplacementTransform(x, t_1))
+        with self.voiceover("""Now, let $f$ represent the number of times in which when $x$ is read, we do not have a bucket containing $x$ and
+                            all the buckets are full. This means that in each of these occurences, we decrement all the counters in the buckets."""):
+            f = MathTex(r"f", font_size = 48).next_to(t_1, UP*3)
+            self.play(Create(f))
+        with self.voiceover("""Next, let i represent the number of times in which when $x$ is read, we either have a bucket containing $x$ or there is an empty bucket.
+                            In each of these occurences, x causes its own bucket to be incremented."""):
+            i = MathTex(r"i", font_size = 48).next_to(f, RIGHT)
+            self.play(f.animate.shift(LEFT),Create(i))
+        with self.voiceover("""Observe that these are the only two possibilities when x is read. Thus, we can say that t is the sum of these counts"""):
+            plus = MathTex(r"+")
+            t_sum = VGroup(f, plus, i, MathTex(r"="), t_1)
+            self.play(t_sum.animate.arrange(RIGHT))
+            self.wait(2)
+            new_t_sum = VGroup(f, plus, i, threshold.next_to(i, RIGHT)).arrange(RIGHT)
+            self.play(Transform(t_sum, new_t_sum))
+        with self.voiceover("""Next, let d be the total number of times that a bucket containing x is decremented. Since a counter never goes below zero, we 
+                            can say that d is at most i. Furthermore, if d is equal to i, that means that x is not one of our candidates since it wouldnt
+                            occupy one of the buckets at the end of the stream. In order to reach a contradiction, let us assume that this is the case."""):
+            d = MathTex(r"d", font_size = 48).next_to(new_t_sum, UP*3)
+            self.play(Create(d))
+            self.wait(2)
+            i_2 = MathTex(r"i", font_size = 48)
+            d_inequality = VGroup(d, MathTex(r"\leq"), i_2)
+            self.play(d_inequality.animate.arrange(RIGHT).next_to(d, 0))
+            self.wait(2)
+            d_equality = VGroup(d, MathTex(r"="), i_2).arrange(RIGHT).next_to(new_t_sum, UP*3)
+            self.play(ReplacementTransform(d_inequality, d_equality))
+        with self.voiceover("Then, we substitute i for d:"):
+            new_t_sum_2 = VGroup(f, MathTex(r"+"), d, threshold).next_to(new_t_sum, 0).arrange(RIGHT)
+            self.play(ReplacementTransform(new_t_sum, new_t_sum_2))
+            self.wait(2)
+        # with self.voiceover("Then, a little rerranging gives us this:"):
+        #     new_t_sum_3 = VGroup(d, plus, f, threshold).next_to(new_t_sum_2, 0)
+        #     self.play(ReplacementTransform(new_t_sum_2, new_t_sum_3))
+        #     self.wait(2)
+        # with self.voiceover("""Now for the key oberservation. The values of d and f represent times in which the buckets are all full and are all
+        #                     decremented. The fact we can decrement a bucket represents that an element must have incremented that bucket in the past.
+        #                     Moreover, each of these buckets contain a distinct element and we also have the new element in the stream that caused the decrements.
+        #                     This means that for each of these d + f decrements, we can associate k+1 distinct occurences of elements in the stream."""):
+            
+            
+        # with self.voiceover('Since there are n total elements in the stream, it must be the case that the total of these decrements is at most n.'):
+        
+        # with self.voiceover("""But wait a second. This is a contradiction. This means that our assumption was wrong and that d must be strictly less than i.
+        #                     This then means the bucket containing x must be decremented less than the number of times it was incremented."""):
+
+        # with self.voiceover("Therefore, x must be a candidate at the end of the stream."):
+
+        # with self.voiceover("""Now, I have been purposefully vague about the implemention. Due to the nature of data streams, we usually have very little time to process each element.
+        #                     This means that operations such as decrementing the counter of every bucket should ideally be done in constant time. Fortunately, Demaine et al. provide 
+        #                     a data structure that can achieve this for us. It consists of using a """):
+
+
+        
+
+
+
+
+
+
 
     def make_bucket(_):
         bucket_right_line = Line(start=[1,-1,0], end=[1,1,0], stroke_width=8)
